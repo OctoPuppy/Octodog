@@ -1,2 +1,3 @@
-# ProjBoard
-原型
+# Octodog
+
+Rename from ProjBoard
