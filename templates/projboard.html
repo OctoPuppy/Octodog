@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+  <head>
+
+    <title>Project Board for OMOOC2py</title>
+    <meta charset="UTF-8">
+    <style>
+    h1 {
+      color: #2F4F4F;
+      font-family: courier;
+      font-size: 280%;
+      text-align: center;
+    }
+    h3 {
+      color: #2E8B57 
+      font-family: Georgia;
+      text-align: center;
+    }
+    div {
+      color: #6E6E6E;
+      font-family: courier;
+      font-size: 120%;
+    }
+    div.info {
+      color: #6E6E6E 
+    }
+    div.readlog {
+      color: #6E6E6E;
+      font-family: Georgia;
+      text-align: center;
+    }
+    i.etime {color: #6E6E6E; font-size: 100%}
+    pre.comment {color:#6E6E6E; font-size: 120%}
+    </style>
+
+  </head>
+  
+  <body>
+    <h1>Project Board for OMOOC2py</h1>
+    <h3>Give comments to the teams!</h3>
+    
+    <div class=info align="center">
+      <table border="0" cellpadding="2" width="600px">
+        <tr>
+          <td colspan="2">带它回家 Stray Pets Helper</td>
+        </tr>
+        <tr>
+          <td width="200px">@xpgeng</td>
+          <td rowspan="3">流浪宠物信息平台</td>
+        </tr>
+        <tr>
+          <td>@huijuannan</td>
+        </tr>
+        <tr>
+          <td>@tiezipy</td>
+        </tr>
+      </table>
+    </div>
+    <br><br>
+    <form action="/" method="post">
+    <div align="center">
+    给他们留个言吧~ <br>
+    <input type="text" name="newcomment" size="30"/><br> 
+    <input value="Submit" type="submit"/>
+    </div>
+    </form><br>
+    
+    {% for i in comment_log %}
+      <div class=readlog>
+        <i class=etime>{{i['time']}}</i>
+        <pre class=comment>{{i['comment']}}</pre>
+      </div>
+    {% endfor %}
+
+    <div id="disqus_thread" width="400"></div>
+<script>
+
+var disqus_config = function () {
+this.page.url = 'http://projboard.sinaapp.com/'; // Replace PAGE_URL with your page's canonical URL variable
+this.page.identifier = 'project-board'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+
+s.src = '//projectboard2.disqus.com/embed.js';
+
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+<script id="dsq-count-scr" src="//projectboard2.disqus.com/count.js" async></script>
+  </body>
+</html>
+
