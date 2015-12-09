@@ -187,5 +187,25 @@
 <script src="http://cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
 <!-- Include all compiled plugins (below), or include individual files as needed -->
 <script src="../static/js/bootstrap.min.js"></script>
+
+<div id="disqus_thread" style="margin-left:300px; margin-right:50px; margin-top: 20px"></div>
+    <script>
+    var disqus_config = function () {
+    this.page.url = 'http://projboard.sinaapp.com/'; // Replace PAGE_URL with your page's canonical URL variable
+    this.page.identifier = 'project-board'; // Replace PAGE_IDENTIFIER with your page's identifier variable
+  };
+
+  (function() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+
+    s.src = '//projectboard2.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+  })();
+  </script>
+
+  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+  <script id="dsq-count-scr" src="//projectboard2.disqus.com/count.js" async></script>
 </body>
 </html>
