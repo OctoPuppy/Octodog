@@ -9,14 +9,11 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 
 from flask import Flask, render_template, request, redirect, url_for, flash
-import sae
 import sae.kvdb
 from time import localtime, strftime
 
 app = Flask(__name__)
 kv = sae.kvdb.Client()
-
-# key for each group = 1pro, 2pro....
 
 def load_comment():
 	log = []
@@ -43,6 +40,13 @@ def leave_comment():
 	input_comment(new_comment,count)
 	comment_log = load_comment()
 	return redirect(url_for('projboard'))
+
+
+@app.route('/project/<projectname>')
+def show_project(projectname):
+	# show the project profile with info
+	#return render_template("projectprofile.html")
+	return 'showcase for project %s' % projectname
 
 #@app.route('/', method='DELETE')
 #def delete():
