@@ -11,61 +11,49 @@ sys.setdefaultencoding('utf-8')
 from flask import Flask, render_template, request, redirect, session, url_for, flash
 from flask.ext.wtf import Form
 from wtforms import StringField, SubmitField
-from wtforms.validators import URL
+from wtforms.validators import URL,Required
 #import sae.kvdb
 #from time import localtime, strftime
 
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'OctoDog key'
-#kv = sae.kvdb.Client()
 
-
-# key for each group = 1pro, 2pro....
-
-#def load_comment():
-#	log = []
-#	for i in list(kv.get_by_prefix('pr')):
-#		log.append(i[1])
-#	return log
-
-#def input_comment(new_comment,count):
-#	countkey = "pr" + str(count)
-#	comment_time = strftime("%Y %b %d %H:%M", localtime())
-#	comments = {'time':comment_time,'comment':new_comment}
-#	kv.set(countkey,comments)
+def get_repo_name(repo_url):
+	'''
+	Parse the url of the repository to get the name.
+	'''
+	from urlparse import urlparse, urlsplit
+	foo = urlparse(repo_url)
+	return foo.path.split('/')[2]
 
 
 @app.route('/',methods=['GET'])
 def board():
-#	comment_log = load_comment()
 	return render_template("index.html")
 
 class InsertPro(Form):
-	projecturl = StringField('Add your project to OctoDog', validators=[URL(message='\
+	repo_url = StringField('Add your project to OctoDog', validators=[URL(message='\
 		Sorry, this is not a valid URL')], default='http://github.com/user/repository')
+		#repo_url = StringField('Add project', validators=[Required()])
 	submit = SubmitField('Submit')
 
 
 @app.route('/project', methods=['POST','GET'])
-def insertpro():
+def insert_pro():
 	form = InsertPro()
-	if request.method == 'POST':
-		if form.validate_on_submit():
-			session['projecturl'] = form.projecturl.data
-			return redirect(url_for('insertpro'))
-		else:
-			return render_template("project.html",form = form,projecturl=session.get('projecturl'))
-	
-	return render_template("project.html",form = form, projecturl=session.get('projecturl'))
+	if form.validate_on_submit():
+		session['repo_url'] = form.repo_url.data
+		u = session.get('repo_url')
+		reponame = get_repo_name(u)
+		return redirect(url_for('show_pro', reponame=reponame))	
+	return render_template("project.html", form=form, repo_url=session.get('repo_url'))
 
-
-
-@app.route('/project/<projectname>',methods=['GET'])
-def show_project(projectname):
+@app.route('/project/<reponame>', methods=['GET'])
+def show_pro(reponame):
 	# show the project profile with info
 	#return render_template("projectprofile.html")
-	return 'showcase for project %s' % projectname
+	return 'showcase for project %s' % reponame
 
 
 

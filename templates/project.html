@@ -38,8 +38,9 @@
   <body>
     <form method="post">
     <div align="center">
-    {{ form.projecturl.label }} 
-    {{ form.projecturl() }}
+    {{ form.hidden_tag() }}
+    {{ form.repo_url.label }} 
+    {{ form.repo_url() }}
     {{ form.submit() }}
         </div>
     </form><br>
