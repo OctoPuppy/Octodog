@@ -38,7 +38,7 @@
   <body>
     <form method="post">
     <div align="center">
-    {{ form.hidden_tag() }}
+    {{ form.hidden_tag() }} <!--must have to approve the POST methos-->
     {{ form.repo_url.label }} 
     {{ form.repo_url() }}
     {{ form.submit() }}
