@@ -18,6 +18,7 @@ from wtforms.validators import URL,Required
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'OctoDog key'
+repository = ['a','b','c','d']
 
 def get_repo_name(repo_url):
 	'''
@@ -30,7 +31,8 @@ def get_repo_name(repo_url):
 
 @app.route('/',methods=['GET'])
 def board():
-	return render_template("index.html")
+	return render_template("index.html", repos = repository)
+
 
 class InsertPro(Form):
 	repo_url = StringField('Add your project to OctoDog', validators=[URL(message='\
