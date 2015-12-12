@@ -1,70 +1,22 @@
-<!DOCTYPE html>
-<html>
-  <head>
+{% extends "layout.html" %}
+{% block list %}
+<div class="list-group">
+    {% for repo in repos %}
+    <a href="#" class="list-group-item">{{repo}}</a>
+    {% endfor %}
+</div>
+{% endblock %}
 
-    <title>Project Board for OMOOC2py</title>
-    <meta charset="UTF-8">
-    <style>
-    h1 {
-      color: #2F4F4F;
-      font-family: courier;
-      font-size: 280%;
-      text-align: center;
-    }
-    h3 {
-      color: #2E8B57 
-      font-family: Georgia;
-      text-align: center;
-    }
-    div {
-      color: #6E6E6E;
-      font-family: courier;
-      font-size: 120%;
-    }
-    div.info {
-      color: #6E6E6E 
-    }
-    div.readlog {
-      color: #6E6E6E;
-      font-family: Georgia;
-      text-align: center;
-    }
-    i.etime {color: #6E6E6E; font-size: 100%}
-    pre.comment {color:#6E6E6E; font-size: 120%}
-    </style>
-
-  </head>
-  
-  <body>
-    <form method="post">
-    <div align="center">
+{% block content %}
+<div class="caption-full">
+<form method="post">
+  <div class="form-group" align="center">
     {{ form.hidden_tag() }} <!--must have to approve the POST methos-->
-    {{ form.repo_url.label }} 
-    {{ form.repo_url() }}
-    {{ form.submit() }}
-        </div>
-    </form><br>
-    
-
-    <div id="disqus_thread" style="margin-left:300px; margin-right:50px; margin-top: 20px"></div>
-    <script>
-    var disqus_config = function () {
-    this.page.url = 'http://projboard.sinaapp.com/'; // Replace PAGE_URL with your page's canonical URL variable
-    this.page.identifier = 'project-board'; // Replace PAGE_IDENTIFIER with your page's identifier variable
-  };
-
-  (function() { // DON'T EDIT BELOW THIS LINE
-    var d = document, s = d.createElement('script');
-
-    s.src = '//projectboard2.disqus.com/embed.js';
-
-    s.setAttribute('data-timestamp', +new Date());
-    (d.head || d.body).appendChild(s);
-  })();
-  </script>
-
-  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
-  <script id="dsq-count-scr" src="//projectboard2.disqus.com/count.js" async></script>
-  </body>
-</html>
+    {{ form.repo_url.label(class="control-label") }}
+    {{ form.repo_url(class="form-control") }}
+  </div>
+    {{ form.submit(class="btn btn-default") }}
+</form>
+</div>
+{% endblock %} 
 

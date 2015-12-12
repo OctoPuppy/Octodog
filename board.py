@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 '''
-ProjectBoard Web Application
-Access http://projboard.sinaapp.com/
+OctoDog Web Application
+#TODO-change url name 
+http://projboard.sinaapp.com/
 @author: bambooom
 '''
 import sys
@@ -35,7 +36,7 @@ def board():
 
 
 class InsertPro(Form):
-	repo_url = StringField('Add your project to OctoDog', validators=[URL(message='\
+	repo_url = StringField('Add your project', validators=[URL(message='\
 		Sorry, this is not a valid URL')], default='http://github.com/user/repository')
 		#repo_url = StringField('Add project', validators=[Required()])
 	submit = SubmitField('Submit')
@@ -48,14 +49,15 @@ def insert_pro():
 		session['repo_url'] = form.repo_url.data
 		u = session.get('repo_url')
 		reponame = get_repo_name(u)
-		return redirect(url_for('show_pro', reponame=reponame))	
-	return render_template("project.html", form=form, repo_url=session.get('repo_url'))
+		return redirect(url_for('show_pro', reponame=reponame, repos=repository))	
+	return render_template("project.html", repos=repository, 
+		form=form, repo_url=session.get('repo_url'))
 
 @app.route('/project/<reponame>', methods=['GET'])
 def show_pro(reponame):
 	# show the project profile with info
-	#return render_template("projectprofile.html")
-	return 'showcase for project %s' % reponame
+	return render_template("profile.html", reponame=reponame, repos=repository)
+	#return 'showcase for project %s' % reponame
 
 
 
