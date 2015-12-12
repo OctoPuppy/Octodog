@@ -22,7 +22,7 @@
     - [ ] 测试反馈
 - [ ] 10w 测试+优化
 
-### 最新🐙🐶版本展示
+### 🐙🐶版本迭代
 
 * [OctoPuppy2](http://2.projboard.sinaapp.com/)
 * [OctoPuppy1](http://projboard.sinaapp.com/#)
