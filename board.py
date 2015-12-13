@@ -12,7 +12,7 @@ sys.setdefaultencoding('utf-8')
 from flask import Flask, render_template, request, redirect, session, url_for, flash
 from flask.ext.wtf import Form
 from wtforms import StringField, SubmitField
-from wtforms.validators import URL,Required
+from wtforms.validators import URL
 #import sae.kvdb
 #from time import localtime, strftime
 
@@ -36,9 +36,8 @@ def board():
 
 
 class InsertPro(Form):
-	repo_url = StringField('Add your project', validators=[URL(message='\
-		Sorry, this is not a valid URL')], default='http://github.com/user/repository')
-		#repo_url = StringField('Add project', validators=[Required()])
+	repo_url = StringField("Add your project", validators=[URL(message='\
+		Sorry, this is not a valid URL')])
 	submit = SubmitField('Submit')
 
 
@@ -49,14 +48,18 @@ def insert_pro():
 		session['repo_url'] = form.repo_url.data
 		u = session.get('repo_url')
 		reponame = get_repo_name(u)
-		return redirect(url_for('show_pro', reponame=reponame, repos=repository))	
+		repository.append(reponame)
+		# flash("Added Successfully.")
+		return redirect(url_for('show_pro', reponame=reponame, 
+			repos=repository, _external=True))	
 	return render_template("project.html", repos=repository, 
 		form=form, repo_url=session.get('repo_url'))
 
 @app.route('/project/<reponame>', methods=['GET'])
 def show_pro(reponame):
 	# show the project profile with info
-	return render_template("profile.html", reponame=reponame, repos=repository)
+	return render_template("profile.html", reponame=reponame, 
+		repos=repository)
 	#return 'showcase for project %s' % reponame
 
 
