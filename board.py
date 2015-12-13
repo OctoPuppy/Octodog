@@ -19,8 +19,15 @@ from dbhandler import fetch_repos_table, fetch_name_list, add_repo
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'OctoDog key'
-repos_table = fetch_repos_table()
-reponame_list = fetch_name_list(repos_table)
+
+#repos_table = 
+reponame_list = fetch_name_list(fetch_repos_table())
+
+def update_list():
+	global reponame_list
+	#repos_table = fetch_repos_table()
+	reponame_list = fetch_name_list(fetch_repos_table())
+	return reponame_list
 
 def get_repo_name(repo_url):
 	'''
@@ -33,6 +40,8 @@ def get_repo_name(repo_url):
 
 @app.route('/',methods=['GET'])
 def board():
+	global reponame_list
+	reponame_list = update_list()
 	return render_template("index.html", repos = reponame_list)
 
 
@@ -45,13 +54,14 @@ class InsertPro(Form):
 @app.route('/project', methods=['POST','GET'])
 def insert_pro():
 	form = InsertPro()
+	global reponame_list
 	if form.validate_on_submit():
 		session['repo_url'] = form.repo_url.data
 		url = session.get('repo_url')
 		reponame = get_repo_name(url)
 		new_repo = reponame, url
 		add_repo(new_repo)
-		#repository.append(reponame)
+		reponame_list = update_list()
 		# flash("Added Successfully.")
 		return redirect(url_for('show_pro', reponame=reponame, 
 			repos=reponame_list, _external=True))	
@@ -61,6 +71,8 @@ def insert_pro():
 @app.route('/project/<reponame>', methods=['GET'])
 def show_pro(reponame):
 	# show the project profile with info
+	global reponame_list
+	reponame_list = update_list()
 	return render_template("profile.html", reponame=reponame, 
 		repos=reponame_list)
 	#return 'showcase for project %s' % reponame

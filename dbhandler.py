@@ -26,7 +26,6 @@ def fetch_repos_table():
 def fetch_name_list(repos_table):
     name_list = [repos_table[i][0] for i in range(len(repos_table))]
     return name_list
-     
 
 def add_repo(new_repo):
     conn = sqlite3.connect(ROOT + '/Repository.db')
@@ -41,7 +40,8 @@ def add_repo(new_repo):
 #add_repo(new_repo)
 #add_repo(new_repo)
 #add_repo(new_repo)
-
+#reponame_list = fetch_name_list(fetch_repos_table())
+#print reponame_list
 #a = get_repo_table()
 
 #print len(a)
