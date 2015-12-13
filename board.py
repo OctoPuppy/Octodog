@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 '''
 OctoDog Web Application
+Main Web Function
 #TODO-change url name 
 http://projboard.sinaapp.com/
 @author: bambooom
@@ -13,13 +14,13 @@ from flask import Flask, render_template, request, redirect, session, url_for, f
 from flask.ext.wtf import Form
 from wtforms import StringField, SubmitField
 from wtforms.validators import URL
-#import sae.kvdb
-#from time import localtime, strftime
+from dbhandler import fetch_repos_table, fetch_name_list, add_repo
 
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'OctoDog key'
-repository = ['a','b','c','d']
+repos_table = fetch_repos_table()
+reponame_list = fetch_name_list(repos_table)
 
 def get_repo_name(repo_url):
 	'''
@@ -32,7 +33,7 @@ def get_repo_name(repo_url):
 
 @app.route('/',methods=['GET'])
 def board():
-	return render_template("index.html", repos = repository)
+	return render_template("index.html", repos = reponame_list)
 
 
 class InsertPro(Form):
@@ -46,20 +47,22 @@ def insert_pro():
 	form = InsertPro()
 	if form.validate_on_submit():
 		session['repo_url'] = form.repo_url.data
-		u = session.get('repo_url')
-		reponame = get_repo_name(u)
-		repository.append(reponame)
+		url = session.get('repo_url')
+		reponame = get_repo_name(url)
+		new_repo = reponame, url
+		add_repo(new_repo)
+		#repository.append(reponame)
 		# flash("Added Successfully.")
 		return redirect(url_for('show_pro', reponame=reponame, 
-			repos=repository, _external=True))	
-	return render_template("project.html", repos=repository, 
+			repos=reponame_list, _external=True))	
+	return render_template("project.html", repos=reponame_list, 
 		form=form, repo_url=session.get('repo_url'))
 
 @app.route('/project/<reponame>', methods=['GET'])
 def show_pro(reponame):
 	# show the project profile with info
 	return render_template("profile.html", reponame=reponame, 
-		repos=repository)
+		repos=reponame_list)
 	#return 'showcase for project %s' % reponame
 
 
