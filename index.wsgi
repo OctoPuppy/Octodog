@@ -9,6 +9,6 @@ http://projboard.sinaapp.com/
 import sae
 sae.add_vendor_dir('3rdParty')
 
-from board import app
+from main import app
 
 application = sae.create_wsgi_app(app)
