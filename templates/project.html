@@ -2,7 +2,7 @@
 {% block list %}
 <div class="list-group">
     {% for repo in repos %}
-    <a href="#" class="list-group-item">{{repo}}</a>
+    <a href={{url_for('show_pro', reponame=repo)}} class="list-group-item">{{repo}}</a>
     {% endfor %}
 </div>
 {% endblock %}
