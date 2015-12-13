@@ -88,5 +88,19 @@ def about_us():
 	reponame_list = fetch_repos()
 	return render_template("about.html", repos=reponame_list)
 
+@app.route('/tools', methods=['GET'])
+def tools():
+	# show toolbox here
+	global reponame_list
+	reponame_list = fetch_repos()
+	return render_template("tools.html", repos=reponame_list)
+
+@app.route('/rank', methods=['GET'])
+def ranks():
+	# show toolbox here
+	global reponame_list
+	reponame_list = fetch_repos()
+	return render_template("rank.html", repos=reponame_list) 
+
 if __name__ == '__main__':
 	app.run(debug=True)
