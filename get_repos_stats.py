@@ -6,52 +6,77 @@ list stats data for the given repos.
 
 import requests
 
-# load all the repos in the dict
-# key = owner_name, value = repo_name
-repo_dict = {}
-with open("repos.txt", "r") as f:
-    for line in f:
-        temp_list = line.strip('\n').split('/')
-        owner = temp_list[-2]
-        repo = temp_list[-1]
-        repo_dict[owner] = repo
+
+def read_repos():
+    '''
+    load all the repos in the txt file to a dict
+    key = owner_name, value = repo_name
+    '''
+    repo_dict = {}
+    with open("repos.txt", "r") as f:
+        for line in f:
+            temp_list = line.strip('\n').split('/')
+            owner = temp_list[-2]
+            repo = temp_list[-1]
+            repo_dict[owner] = repo
+
+    return repo_dict
+
 
 url = "https://api.github.com"
-#auth = (username, password)
 
-for owner in repo_dict:
-    repo = repo_dict[owner]
-    print "In " +owner+"/"+repo
+def get_commits_count(owner, repo):
+    '''
+    get the commits count for the given repo.
+    This commits number is consistent with the number in the homepage.
+    '''
+    next_url = url+"/repos/"+owner+"/"+repo+"/commits"
+    commits_count = 0
 
-    # get the contributor number, and their respective commits number.
-    # This commits number is consistent with the number in pulse page, 
-    # but is not consistent with the number in the homepage,
-    # becouse it does not inclue the merged commits.
-    url1 = url+"/repos/"+owner+"/"+repo+"/stats/contributors"
-    r1 = requests.get(url1)
-    if r1.status_code == 200:
-        contributor_data = r1.json()
-        contributor_num = len(contributor_data)
-        print "There are %d contributors, their commits number are as follows:" % contributor_num
-        for people in contributor_data:
-           print people["author"]["login"]+":"+str(people["total"])
-    else:
-        print "Wrong status_code:" + str(r1.status_code)
+    # the r.json() only display 30 commits in one page
+    # so I use the while loop, to count all the commits
+    while next_url:
+        r = requests.get(next_url)
+        commits = r.json()
+        commits_count  += len(commits)
 
-    # get the commits number consistent with the number in homepage.
-    # r2 = requests.get(url+"/repos/"+owner+"/"+repo+"/commits")
-    # if r2.status_code == 200:
-    #     commits = r2.json()
-    #     for commit in commits:
-    #         print commit["committer"]["login"]
+        if "next" in r.links:
+            next_url = r.links["next"]["url"]
+        else:
+            next_url = ""
 
-    # get the star/watch/fork number for a repo
+    return commits_count
+
+def get_repo_stats(owner, repo):
+    '''
+    get the star/watch/fork number for a repo
+    '''
     url2 = url+"/repos/"+owner+"/"+repo
     r2 = requests.get(url2)
+
     if r2.status_code == 200:
         repo_data = r2.json()
-        print "The repo has been stared by %d times, watched by %d times, and forked by %d times." % (repo_data["stargazers_count"], repo_data["watchers_count"], repo_data["forks_count"])
+        stars_count = repo_data["stargazers_count"]
+        watchers_count = repo_data["watchers_count"]
+        forks_count = repo_data["forks_count"]
     else:
-        print "Wrong status_code:" + str(r2.status_code)
+        return (None, None, None)
 
-    print
+    # return a set of the commits/stars/watchers/forks count
+    return (stars_count, watchers_count, forks_count)
+
+if __name__ == "__main__":
+    repo_dict = read_repos()
+    results_list = []
+
+    for owner, repo in repo_dict.items():
+        repo_stats_dict = {}
+        commits = get_commits_count(owner, repo)
+        stars, watchers, forks = get_repo_stats(owner, repo)
+        repo_stats_dict["name"] = repo
+        repo_stats_dict["commits"] = commits
+        repo_stats_dict["stars"] = stars
+        repo_stats_dict["watchers"] = watchers
+        repo_stats_dict["forks"] = forks
+        results_list.append(repo_stats_dict)
+        print repo_stats_dict
