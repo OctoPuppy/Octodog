@@ -6,6 +6,7 @@ list stats data for the given repos.
 
 import requests
 
+auth = ("octodog-auth", "octoocto2015")
 
 def read_repos():
     '''
@@ -36,7 +37,7 @@ def get_commits_count(owner, repo):
     # the r.json() only display 30 commits in one page
     # so I use the while loop, to count all the commits
     while next_url:
-        r = requests.get(next_url)
+        r = requests.get(next_url, auth=auth)
         commits = r.json()
         commits_count  += len(commits)
 
@@ -52,7 +53,7 @@ def get_repo_stats(owner, repo):
     get the star/watch/fork number for a repo
     '''
     url2 = url+"/repos/"+owner+"/"+repo
-    r2 = requests.get(url2)
+    r2 = requests.get(url2, auth=auth)
 
     if r2.status_code == 200:
         repo_data = r2.json()
@@ -60,23 +61,44 @@ def get_repo_stats(owner, repo):
         watchers_count = repo_data["watchers_count"]
         forks_count = repo_data["forks_count"]
     else:
-        return (None, None, None)
+        return None
 
     # return a set of the commits/stars/watchers/forks count
-    return (stars_count, watchers_count, forks_count)
+    return stars_count+watchers_count+forks_count
 
-if __name__ == "__main__":
+def get_contributors_commits(owner, repo):
+    '''
+    get the commits count of each contributor.
+    '''
+    url3 = url+"/repos/"+owner+"/"+repo+"/stats/contributors"
+    r3 = requests.get(url3, auth=auth)
+    contributors = {}
+
+    for people in r3.json():
+        name = people["author"]["login"]
+        commits_count = people["total"]
+        contributors[name] = commits_count
+
+    return contributors
+
+def compute_uneven(owner, repos):
+    tmp = get_contributors_commits(owner, repos)
+    tmp2 = [tmp[name] for name in list(tmp)]
+    return round((max(tmp2)-min(tmp2))*len(tmp2)/float(sum(tmp2)),2)
+
+def fetch_stat():
+    #repo_dict = {'Run-map': 'RUNMAP'}
     repo_dict = read_repos()
     results_list = []
-
     for owner, repo in repo_dict.items():
         repo_stats_dict = {}
-        commits = get_commits_count(owner, repo)
-        stars, watchers, forks = get_repo_stats(owner, repo)
         repo_stats_dict["name"] = repo
-        repo_stats_dict["commits"] = commits
-        repo_stats_dict["stars"] = stars
-        repo_stats_dict["watchers"] = watchers
-        repo_stats_dict["forks"] = forks
+        repo_stats_dict["commits"] = get_commits_count(owner, repo)
+        repo_stats_dict["attention"] = get_repo_stats(owner, repo)
+        repo_stats_dict["uneven"] = compute_uneven(owner, repo)
         results_list.append(repo_stats_dict)
-        print repo_stats_dict
+
+    return results_list
+
+if __name__ == "__main__":
+    print fetch_stat()
