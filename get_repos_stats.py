@@ -33,9 +33,9 @@ def read_repos():
     repo_dict = {}
     for item in repotext:
         temp_list = item.split('/')
-            owner = temp_list[-2]
-            repo = temp_list[-1]
-            repo_dict[owner] = repo
+        owner = temp_list[-2]
+        repo = temp_list[-1]
+        repo_dict[owner] = repo
 
     return repo_dict
 
@@ -100,6 +100,10 @@ def get_contributors_commits(owner, repo):
 def compute_uneven(owner, repos):
     tmp = get_contributors_commits(owner, repos)
     tmp2 = [tmp[name] for name in list(tmp)]
+    if tmp2:
+        tmp2 = tmp2
+    else:
+        return 0
     return round((max(tmp2)-min(tmp2))*len(tmp2)/float(sum(tmp2)),2)
 
 def fetch_stat():
