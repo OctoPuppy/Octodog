@@ -1,0 +1,98 @@
+{% extends "layout.html" %}
+{% block list %}
+<div class="list-group">
+    {% for repo in repos %}
+    <a href={{url_for('show_pro', reponame=repo)}} class="list-group-item">{{repo}}</a>
+    {% endfor %}
+</div>
+{% endblock %}
+
+{% block content %}
+
+<<<<<<< HEAD
+<html lang="en">
+<div style="background-color:whitesmoke; color:black; padding:20px;">
+    
+  <!-- github star & fork 这里有个username还未定义，例：username=OctoPuppy repo=OctoDog -->
+    <iframe style="margin-left:500px;float:right" src="https://ghbtns.com/github-btn.html?user=Octodog&repo=OctoDog&type=star&count=true&size=large" frameborder="0" scrolling="0" width="160px" height="30px">     
+    </iframe>
+          
+    <iframe style="float:right" src="https://ghbtns.com/github-btn.html?user=OctoPuppy&repo=Octodog&type=fork&count=true&size=large&v=2" frameborder="0" scrolling="0" width="160px" height="30px">
+    </iframe>
+<div id="content">
+    
+    
+    <!-- inner page tabs -->
+<h1><sup>OctoPuppy</sup></h1>
+<ul class="tabs">
+        <li>
+          <input type="radio" checked name="tabs" id="tab1">
+          <label for="tab1">Introduction</label>
+          <div id="tab-content1" class="tab-content animated fadeIn">
+              <h5>About</h5>
+              <hr>
+              
+              <h5>Member</h5>
+              <hr>
+          </div>
+        </li>
+   
+    
+        <li>
+          <input type="radio" name="tabs" id="tab2">
+          <label for="tab2">Statistics</label>
+          <div id="tab-content2" class="tab-content animated fadeIn">
+          </div>
+        </li>
+        <li>
+          <input type="radio" name="tabs" id="tab3">
+          <label for="tab3">Gitbook</label>
+          <div id="tab-content3" class="tab-content animated fadeIn">
+          </div>
+        </li>
+</ul>
+
+    <hr>
+    <hr>
+    <hr>
+   
+=======
+<div style="background-color:whitesmoke; color:black; padding:20px;">
+    
+  <!-- github star & fork 这里有个username还未定义，例：username=OctoPuppy repo=OctoDog -->
+<iframe style="margin-left:500px;float:right" src="https://ghbtns.com/github-btn.html?user=Run-map&repo=RUNMAP&type=star&count=true&size=large" frameborder="0" scrolling="0" width="160px" height="30px"></iframe>
+          
+                    <iframe style="float:right" src="https://ghbtns.com/github-btn.html?user=Run-map&repo=RUNMAP&type=fork&count=true&size=large&v=2" frameborder="0" scrolling="0" width="160px" height="30px"></iframe>
+  
+
+    <h1>{{ reponame }}</h1> 
+    <p style="float:left">{{ points }} pts</p>
+    <hr>
+ 
+<br/>
+    <div id="content">
+
+<h3>About</h3>
+
+        <!-- to show readme.md page in a frame src变量？-->
+ <div><a href="http://www.cssdrive.com" target="internal"></a></div>
+<iframe src="https://github.com/Run-map/RUNMAP/blob/master/README.md" style="width: 90%; height: 300px" name="internal"></iframe>
+        
+
+<hr>
+<h3>Members</h3>
+
+<hr>        
+<h3></h3>
+
+    
+
+</div>
+>>>>>>> 87d2b1f1f0d48455b3483b18814e9049062d51cb
+{% endblock %}                   
+
+               
+
+               
+                
+                
