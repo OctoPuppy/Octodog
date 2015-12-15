@@ -1,0 +1,49 @@
+{% extends "layout.html" %}
+{% block list %}
+<div class="list-group">
+    {% for repo in repos %}
+    <a href={{url_for('show_pro', reponame=repo)}} class="list-group-item">{{repo}}</a>
+    {% endfor %}
+</div>
+{% endblock %}
+
+{% block content %}
+
+<div style="background-color:whitesmoke; color:black; padding:20px;">
+    
+  <!-- github star & fork 这里有个username还未定义，例：username=OctoPuppy repo=OctoDog -->
+<iframe style="margin-left:500px;float:right" src="https://ghbtns.com/github-btn.html?user=Run-map&repo=RUNMAP&type=star&count=true&size=large" frameborder="0" scrolling="0" width="160px" height="30px"></iframe>
+          
+                    <iframe style="float:right" src="https://ghbtns.com/github-btn.html?user=Run-map&repo=RUNMAP&type=fork&count=true&size=large&v=2" frameborder="0" scrolling="0" width="160px" height="30px"></iframe>
+  
+
+    <h1>{{ reponame }}</h1> 
+    <p style="float:left">{{ points }} pts</p>
+    <hr>
+ 
+<br/>
+    <div id="content">
+
+<h3>About</h3>
+
+        <!-- to show readme.md page in a frame src变量？-->
+ <div><a href="http://www.cssdrive.com" target="internal"></a></div>
+<iframe src="https://github.com/Run-map/RUNMAP/blob/master/README.md" style="width: 90%; height: 300px" name="internal"></iframe>
+        
+
+<hr>
+<h3>Members</h3>
+
+<hr>        
+<h3></h3>
+
+    
+
+</div>
+{% endblock %}                   
+
+               
+
+               
+                
+                
