@@ -15,6 +15,7 @@ from flask.ext.wtf import Form
 from wtforms import StringField, SubmitField
 from wtforms.validators import URL
 from dbhandler import fetch_repos, add_repo
+from draw3d import draw3d, graph_data
 
 
 app = Flask(__name__)
@@ -100,7 +101,8 @@ def ranks():
 	# show toolbox here
 	global reponame_list
 	reponame_list = fetch_repos()
-	return render_template("rank.html", repos=reponame_list)
+	ploturl=draw3d(graph_data)
+	return render_template("rank.html", repos=reponame_list, ploturl=ploturl)
 
 if __name__ == '__main__':
 	app.run(debug=True)

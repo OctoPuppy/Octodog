@@ -8,18 +8,34 @@ import requests
 
 auth = ("octodog-auth", "octoocto2015")
 
+repotext = [
+"https://github.com/yondjune/iMatch",
+"https://github.com/Run-map/RUNMAP",
+"https://github.com/Wangqiaoyang/RIA-Brain-truster",
+"https://github.com/sherlockhoatszx/Stock_Pickup_and_Reminding",
+"https://github.com/penguinjing/PhotoxOrganizer",
+"https://github.com/ivanlau/jizhemai",
+"https://github.com/imoodmap/imoodmapGroup",
+"https://github.com/xpgeng/straypetshelper",
+"https://github.com/liangchaob/whenmgone",
+"https://github.com/junjielizero/Hunting-for-Great-Books",
+"https://github.com/liangpeili/housebuy",
+"https://github.com/OctoPuppy/Octodog",
+"https://github.com/wp-lai/mipe",
+"https://github.com/Cen74/less-habit"
+]
+
 def read_repos():
     '''
-    load all the repos in the txt file to a dict
+    load all the repos url to a dict
     key = owner_name, value = repo_name
     '''
     repo_dict = {}
-    with open("repos.txt", "r") as f:
-        for line in f:
-            temp_list = line.strip('\n').split('/')
-            owner = temp_list[-2]
-            repo = temp_list[-1]
-            repo_dict[owner] = repo
+    for item in repotext:
+        temp_list = item.split('/')
+        owner = temp_list[-2]
+        repo = temp_list[-1]
+        repo_dict[owner] = repo
 
     return repo_dict
 
@@ -84,6 +100,10 @@ def get_contributors_commits(owner, repo):
 def compute_uneven(owner, repos):
     tmp = get_contributors_commits(owner, repos)
     tmp2 = [tmp[name] for name in list(tmp)]
+    if tmp2:
+        tmp2 = tmp2
+    else:
+        return 0
     return round((max(tmp2)-min(tmp2))*len(tmp2)/float(sum(tmp2)),2)
 
 def fetch_stat():
@@ -99,6 +119,23 @@ def fetch_stat():
         results_list.append(repo_stats_dict)
 
     return results_list
+
+def fetch_list(repos_stats):
+    namelist=[]
+    cmlist=[]
+    attlist=[]
+    uelist=[]
+    for repo in repos_stats:
+        for key, value in repo.items():
+            if key == "name":
+                namelist.append(value)
+            elif key == "commits":
+                cmlist.append(value)
+            elif key == "attention":
+                attlist.append(value)
+            elif key == "uneven":
+                uelist.append(value)
+    return [namelist,cmlist,attlist,uelist]
 
 if __name__ == "__main__":
     print fetch_stat()
