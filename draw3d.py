@@ -13,6 +13,7 @@ from get_repos_stats import *
 
 #import plotly.tools as tls
 #tls.set_credentials_file(username='bambooom',api_key='k01s1p8rme')
+py.sign_in("bambooom", "k01s1p8rme")
 
 graph_data = fetch_list(fetch_stat())
 
