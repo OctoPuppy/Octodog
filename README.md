@@ -27,7 +27,7 @@
 
 ### 🐙🐶版本迭代
 
-* [OctoPuppy2](http://3.projboard.sinaapp.com/)
+* [OctoPuppy3](http://3.projboard.sinaapp.com/)
 * [OctoPuppy2](http://2.projboard.sinaapp.com/)
 * [OctoPuppy1](http://projboard.sinaapp.com/#)
 
