@@ -14,7 +14,7 @@
 $(function() {
     $("#expand").click(function() {
         $("#frame").toggle();
-        $("#frame").attr('src', "http://ghv.artzub.com/#repo=Octodog&user=octopuppy&run");
+        $("#frame").attr('src', "http://ghv.artzub.com/#repo={{reponame}}&user={{ownername}}&run");
         $(this).text( ( $(this).text() == "-" ) ? "+" : "-" );
 
     });
@@ -24,7 +24,7 @@ $(function() {
 
 </head>
 <body>
-    <div id="expand">+</div> (show/hide)
+    <div id="expand">+</div> (show/hide) Repository Dynamic Visulization
     <iframe id="frame" src="" frameborder="0" height="600px" width="100%" scrolling="auto"></iframe>
 </body>
 
