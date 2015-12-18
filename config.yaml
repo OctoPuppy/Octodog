@@ -1,2 +1,6 @@
 name: projboard
-version: 1
+version: 4
+
+cron:
+- url: /cron
+  schedule: every 1 hour, offset 0

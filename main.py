@@ -14,8 +14,8 @@ from flask import Flask, render_template, request, redirect, session, url_for, f
 from flask.ext.wtf import Form
 from wtforms import StringField, SubmitField
 from wtforms.validators import URL
-from dbhandler import fetch_repos, add_repo, fetch_owner_by_repo
-from draw3d import draw3d, graph_data
+from dbhandler import *
+from draw3d import draw3d
 
 
 app = Flask(__name__)
@@ -54,7 +54,7 @@ class InsertPro(Form):
 	submit = SubmitField('Submit')
 
 
-@app.route('/project', methods=['POST','GET'])
+@app.route('/addpro', methods=['POST','GET'])
 def insert_pro():
 	'''
 	input url of repository and one click to add 
@@ -66,13 +66,21 @@ def insert_pro():
 		session['repo_url'] = form.repo_url.data
 		url = session.get('repo_url')
 		ownername, reponame = get_owner_repo_name(url)
-		new_repo = {'name':reponame, 'url':url, 'owner':ownername}
-		add_repo(new_repo) # insert into database 
+		repo_stats = fetch_for_one(ownername, reponame)
+		new_repo = {'name':reponame, 'url':url, 'owner':ownername, 'stats':repo_stats}
+		add_repo(new_repo) # insert into kvdb 
 		reponame_list = fetch_repos()
 		return redirect(url_for('show_pro', reponame=reponame, 
 			repos=reponame_list, _external=True))	
 	return render_template("project.html", repos=reponame_list, 
 		form=form, repo_url=session.get('repo_url'))
+
+@app.route('/delpro')
+def doDelete():
+	kv = sae.kvdb.Client()
+	temp = kv.getkeys_by_prefix("repo#")
+	for i in temp:
+		kv.delete(i)
 
 @app.route('/project/<reponame>', methods=['GET'])
 def show_pro(reponame):
@@ -103,8 +111,23 @@ def ranks():
 	# show toolbox here
 	global reponame_list
 	reponame_list = fetch_repos()
+
+	import sae.kvdb
+	kv = sae.kvdb.Client()
+	graph_data = kv.get("graph")
 	ploturl=draw3d(graph_data)
+	kv.disconnect_all()
+
 	return render_template("rank.html", repos=reponame_list, ploturl=ploturl)
+
+@app.route('/cron', methods=['GET'])
+def cron_update():
+	repo_dict_list = fetch_repo_dict()
+	for repo in repo_dict_list:
+		update_stats(repo)
+	
+	repo_dict_list = fetch_repo_dict()
+	get_graph_data(repo_dict_list)
 
 if __name__ == '__main__':
 	app.run(debug=True)

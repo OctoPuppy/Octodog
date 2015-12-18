@@ -97,7 +97,7 @@ def get_contributors_commits(owner, repo):
 
     return contributors
 
-def compute_uneven(owner, repos):
+def compute_uneven(owner, repo):
     tmp = get_contributors_commits(owner, repos)
     tmp2 = [tmp[name] for name in list(tmp)]
     if tmp2:
@@ -106,36 +106,27 @@ def compute_uneven(owner, repos):
         return 0
     return round((max(tmp2)-min(tmp2))*len(tmp2)/float(sum(tmp2)),2)
 
-def fetch_stat():
+def fetch_for_one(owner, repo):
+    x = get_commits_count(owner, repo) # commits number
+    y = get_repo_stats(owner, repo) # attention=watch+star+fork
+    z = compute_uneven(owner, repo)
+    coordinate = [x, y, z]
+    return coordinate
+
+
+#def fetch_stat():
     #repo_dict = {'Run-map': 'RUNMAP'}
-    repo_dict = read_repos()
-    results_list = []
-    for owner, repo in repo_dict.items():
-        repo_stats_dict = {}
-        repo_stats_dict["name"] = repo
-        repo_stats_dict["commits"] = get_commits_count(owner, repo)
-        repo_stats_dict["attention"] = get_repo_stats(owner, repo)
-        repo_stats_dict["uneven"] = compute_uneven(owner, repo)
-        results_list.append(repo_stats_dict)
+#    repo_dict = read_repos()
+#    results_list = []
+#    for owner, repo in repo_dict.items():
+#        repo_stats_dict = {}
+#        repo_stats_dict["name"] = repo
+#        repo_stats_dict["commits"] = get_commits_count(owner, repo)
+#        repo_stats_dict["attention"] = get_repo_stats(owner, repo)
+#        repo_stats_dict["uneven"] = compute_uneven(owner, repo)
+#        results_list.append(repo_stats_dict)
 
-    return results_list
-
-def fetch_list(repos_stats):
-    namelist=[]
-    cmlist=[]
-    attlist=[]
-    uelist=[]
-    for repo in repos_stats:
-        for key, value in repo.items():
-            if key == "name":
-                namelist.append(value)
-            elif key == "commits":
-                cmlist.append(value)
-            elif key == "attention":
-                attlist.append(value)
-            elif key == "uneven":
-                uelist.append(value)
-    return [namelist,cmlist,attlist,uelist]
+#    return results_list
 
 if __name__ == "__main__":
     print fetch_stat()

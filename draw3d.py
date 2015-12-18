@@ -9,15 +9,16 @@ http://projboard.sinaapp.com/
 
 import plotly.plotly as py
 import plotly.graph_objs as go
-from get_repos_stats import *
+#from get_repos_stats import *
 
-#import plotly.tools as tls
-#tls.set_credentials_file(username='bambooom',api_key='k01s1p8rme')
-py.sign_in("bambooom", "k01s1p8rme")
+#graph_data = fetch_list(fetch_stat())
 
-graph_data = fetch_list(fetch_stat())
+#graph_data = [['mipe', 'straypetshelper', 'RIA-Brain-truster', 'PhotoxOrganizer', 'imoodmapGroup', 'Hunting-for-Great-Books', 'jizhemai', 'whenmgone', 'less-habit', 'Octodog', 'Stock_Pickup_and_Reminding', 'iMatch', 'housebuy', 'RUNMAP'], [1, 111, 2, 15, 45, 75, 16, 4, 3, 77, 29, 28, 7, 27], [4, 11, 0, 3, 8, 0, 5, 4, 2, 20, 13, 8, 1, 17], [0.0, 0.59, 0.0, 0.0, 1.92, 0.0, 0.0, 0.0, 0.0, 0, 2.16, 1.44, 0.0, 0.0]]
+
+
 
 def draw3d(graph_data):
+    py.sign_in("bambooom", "k01s1p8rme")
 
     trace = go.Scatter3d(
         x=graph_data[3],
@@ -77,3 +78,7 @@ def draw3d(graph_data):
     fig = go.Figure(data=data, layout=layout)
     plot_url=py.plot(fig, auto_open=False)
     return plot_url
+
+if __name__ == '__main__':
+    plot = draw3d(graph_data)
+    print plot

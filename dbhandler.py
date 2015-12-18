@@ -16,49 +16,59 @@ sys.setdefaultencoding('utf-8')
 
 def fetch_repos():
     kv = sae.kvdb.Client()
-    temp1 = [i[1] for i in list(kv.get_by_prefix("repo#"))]
+    temp1 = [i[1] for i in list(kv.get_by_prefix("repo@"))]
     temp2 = sorted(temp1, key = lambda x:x['name'])
     name_list = [temp2[i]['name'] for i in range(len(temp2))]
     kv.disconnect_all()
     return name_list
 
-def fetch_owner_by_repo(repo):
+def fetch_repo_dict():
     kv = sae.kvdb.Client()
-    temp = [i[1] for i in kv.get_by_prefix("repo#")]
+    temp = [i[1] for i in kv.get_by_prefix("repo@")]
     kv.disconnect_all()
+    return temp
+
+def fetch_owner_by_repo(repo):
+    temp = fetch_repo_dict()
     for i in temp:
         if i["name"] == repo:
             return i["owner"]
     return None
 
-    #conn = sqlite3.connect(ROOT + '/Repository.db')
-    #c = conn.cursor()
-    #c.execute('CREATE TABLE if not exists repos (reponame text, repourl text)')
-    #c.execute('CREATE UNIQUE INDEX if not exists id ON repos (reponame, repourl)')
-    #c.execute('SELECT * FROM repos')
-    #repos_table = [list(e) for e in c.fetchall()]
-    #return repos_table
-    
-#def fetch_name_list(repos_table):
-#   name_list = [repos_table[i][0] for i in range(len(repos_table))]
-#    return name_list
-
 def add_repo(new_repo):
     kv = sae.kvdb.Client()
-    key = "repo#" + str(len(fetch_repos()))
+    key = "repo@" + new_repo['name']
     kv.set(key,new_repo)
     kv.disconnect_all()
 
+def get_graph_data(repo_dict):
+    namelist=[]
+    cmlist=[]
+    attlist=[]
+    uelist=[]
+    for repo in repo_dict:
+        for key, value in repo.items():
+            if key == "name":
+                namelist.append(value)
+            elif key == "stats":
+                cmlist.append(value[0])
+                attlist.append(value[1])
+                uelist.append(value[2])
+    data = [namelist,cmlist,attlist,uelist]
+    kv=sae.kvdb.Client()
+    kv.set("graph",data)
+    kv.disconnect_all()
 
+def update_stats(repo):
+    kv=sae.kvdb.Client()
+    key = "repo@" + repo['name']
+    
+    from get_repos_stats import fetch_for_one
+    repo['stats'] = fetch_for_one(repo['owner'],repo['name'])
+    kv.set(key, repo)
+    kv.disconnect_all()
 
-    #conn = sqlite3.connect(ROOT + '/Repository.db')
-    #c = conn.cursor()
-    #c.execute('CREATE TABLE if not exists repos (reponame text, repourl text)')
-    #c.execute('INSERT OR IGNORE INTO repos VALUES (?,?)', new_repo) 
-    # INSERT OR IGNORE to ignore the duplicate value input
-    #conn.commit()
-    #conn.close()
-
+    
 #new_repo=('OctoDog','https://github.com/OctoPuppy/Octodog')
 #add_repo(new_repo)
 #add_repo(new_repo)
