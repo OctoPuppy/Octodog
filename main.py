@@ -14,7 +14,7 @@ from flask import Flask, render_template, request, redirect, session, url_for, f
 from flask.ext.wtf import Form
 from wtforms import StringField, SubmitField
 from wtforms.validators import URL
-from dbhandler import fetch_repos, add_repo
+from dbhandler import fetch_repos, add_repo, fetch_owner_by_repo
 from draw3d import draw3d, graph_data
 
 
@@ -31,13 +31,14 @@ reponame_list = fetch_repos()
 #	reponame_list = fetch_name_list(fetch_repos_table())
 #	return reponame_list
 
-def get_repo_name(repo_url):
+def get_owner_repo_name(repo_url):
 	'''
-	Parse the url of the repository to get the name.
+	Parse the url of the repository to get the name of owner and repo.
 	'''
 	from urlparse import urlparse, urlsplit
 	foo = urlparse(repo_url)
-	return foo.path.split('/')[2]
+	temp_list = foo.path.split('/')
+	return temp_list[1], temp_list[2]
 
 
 @app.route('/', methods=['GET'])
@@ -64,8 +65,8 @@ def insert_pro():
 	if form.validate_on_submit():
 		session['repo_url'] = form.repo_url.data
 		url = session.get('repo_url')
-		reponame = get_repo_name(url)
-		new_repo = {'name':reponame, 'url':url}
+		ownername, reponame = get_owner_repo_name(url)
+		new_repo = {'name':reponame, 'url':url, 'owner':ownername}
 		add_repo(new_repo) # insert into database 
 		reponame_list = fetch_repos()
 		return redirect(url_for('show_pro', reponame=reponame, 
@@ -78,8 +79,9 @@ def show_pro(reponame):
 	# show the project profile with info
 	global reponame_list
 	reponame_list = fetch_repos()
+	ownername = fetch_owner_by_repo(reponame)
 	return render_template("profile.html", reponame=reponame, 
-		repos=reponame_list)
+		repos=reponame_list, ownername=ownername)
 	#return 'showcase for project %s' % reponame
 
 @app.route('/about', methods=['GET'])

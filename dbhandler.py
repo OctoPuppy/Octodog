@@ -22,6 +22,15 @@ def fetch_repos():
     kv.disconnect_all()
     return name_list
 
+def fetch_owner_by_repo(repo):
+    kv = sae.kvdb.Client()
+    temp = [i[1] for i in kv.get_by_prefix("repo#")]
+    kv.disconnect_all()
+    for i in temp:
+        if i["name"] == repo:
+            return i["owner"]
+    return None
+
     #conn = sqlite3.connect(ROOT + '/Repository.db')
     #c = conn.cursor()
     #c.execute('CREATE TABLE if not exists repos (reponame text, repourl text)')
