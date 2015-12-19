@@ -98,7 +98,7 @@ def get_contributors_commits(owner, repo):
     return contributors
 
 def compute_uneven(owner, repo):
-    tmp = get_contributors_commits(owner, repos)
+    tmp = get_contributors_commits(owner, repo)
     tmp2 = [tmp[name] for name in list(tmp)]
     if tmp2:
         tmp2 = tmp2

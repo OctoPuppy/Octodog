@@ -17,9 +17,11 @@ from wtforms.validators import URL
 from dbhandler import *
 from draw3d import draw3d
 
+CREDS_FILE = 'plotly-creds.sec'
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'OctoDog key'
+app.config['SECRET_KEY'] = 'OctoDogkey'
+app.config.from_object(__name__)
  
 reponame_list = fetch_repos()
 
@@ -62,6 +64,7 @@ def insert_pro():
 	'''
 	form = InsertPro()
 	global reponame_list
+	from get_repos_stats import fetch_for_one
 	if form.validate_on_submit():
 		session['repo_url'] = form.repo_url.data
 		url = session.get('repo_url')
@@ -111,6 +114,14 @@ def ranks():
 	# show toolbox here
 	global reponame_list
 	reponame_list = fetch_repos()
+
+	import plotly.plotly as py
+	creds=[]
+	with open(app.config['CREDS_FILE']) as f:
+		creds = [x.strip('\n') for x in f.readlines()]
+
+	res = py.sign_in(creds[0],creds[1])
+	get_graph_data(fetch_repo_dict())
 
 	import sae.kvdb
 	kv = sae.kvdb.Client()

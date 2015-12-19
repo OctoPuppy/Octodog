@@ -37,7 +37,7 @@ def fetch_owner_by_repo(repo):
 
 def add_repo(new_repo):
     kv = sae.kvdb.Client()
-    key = "repo@" + new_repo['name']
+    key = "repo@" + str(new_repo['name'])
     kv.set(key,new_repo)
     kv.disconnect_all()
 
@@ -61,14 +61,14 @@ def get_graph_data(repo_dict):
 
 def update_stats(repo):
     kv=sae.kvdb.Client()
-    key = "repo@" + repo['name']
+    key = "repo@" + str(repo['name'])
     
     from get_repos_stats import fetch_for_one
     repo['stats'] = fetch_for_one(repo['owner'],repo['name'])
     kv.set(key, repo)
     kv.disconnect_all()
 
-    
+
 #new_repo=('OctoDog','https://github.com/OctoPuppy/Octodog')
 #add_repo(new_repo)
 #add_repo(new_repo)
