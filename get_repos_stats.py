@@ -129,4 +129,4 @@ def fetch_for_one(owner, repo):
 #    return results_list
 
 if __name__ == "__main__":
-    print fetch_stat()
+    print fetch_for_one("OctoPuppy","Octodog")

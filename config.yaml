@@ -2,5 +2,6 @@ name: projboard
 version: 4
 
 cron:
-- url: /cron
-  schedule: every 1 hour, offset 0
+- description: update github data
+  url: /cron
+  schedule: * */1 * * *

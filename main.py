@@ -84,6 +84,7 @@ def doDelete():
 	temp = kv.getkeys_by_prefix("repo#")
 	for i in temp:
 		kv.delete(i)
+	return redirect(url_for('index'))
 
 @app.route('/project/<reponame>', methods=['GET'])
 def show_pro(reponame):
@@ -139,6 +140,7 @@ def cron_update():
 	
 	repo_dict_list = fetch_repo_dict()
 	get_graph_data(repo_dict_list)
+	return "Update Data Successfully"
 
 if __name__ == '__main__':
 	app.run(debug=True)
