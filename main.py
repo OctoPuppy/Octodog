@@ -10,28 +10,26 @@ import sys
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
+import sae.kvdb
 from flask import Flask, render_template, request, redirect, session, url_for, flash
 from flask.ext.wtf import Form
 from wtforms import StringField, SubmitField
 from wtforms.validators import URL
+from flask_pagedown import PageDown
+from flask_pagedown.fields import PageDownField
+from flaskext.markdown import Markdown
 from dbhandler import *
 from draw3d import draw3d
 
 CREDS_FILE = 'plotly-creds.sec'
 
 app = Flask(__name__)
+pagedown = PageDown(app)
+Markdown(app)
 app.config['SECRET_KEY'] = 'OctoDogkey'
 app.config.from_object(__name__)
  
 reponame_list = fetch_repos()
-
-#def update_list():
-#	'''
-#	update the name list of repository
-#	'''
-#	global reponame_list
-#	reponame_list = fetch_name_list(fetch_repos_table())
-#	return reponame_list
 
 def get_owner_repo_name(repo_url):
 	'''
@@ -80,6 +78,9 @@ def insert_pro():
 
 @app.route('/delpro')
 def doDelete():
+	'''
+	delete all repository
+	'''
 	kv = sae.kvdb.Client()
 	temp = kv.getkeys_by_prefix("repo#")
 	for i in temp:
@@ -96,12 +97,43 @@ def show_pro(reponame):
 		repos=reponame_list, ownername=ownername)
 	#return 'showcase for project %s' % reponame
 
+class PageDownForm(Form):
+    pagedown = PageDownField('Edit Content')
+    submit = SubmitField('Submit')
+
 @app.route('/about', methods=['GET'])
 def about_us():
 	# post README here
 	global reponame_list
 	reponame_list = fetch_repos()
-	return render_template("about.html", repos=reponame_list)
+
+	kv = sae.kvdb.Client()
+	about_content = kv.get('about')
+	kv.disconnect_all()
+	return render_template("about.html", repos=reponame_list, 
+		content=about_content)
+
+@app.route('/about/edit', methods=['GET','POST'])
+def edit_about():
+	'''
+	Edit about in markdown preview and 
+	save it to see markdown in html
+	'''
+	global reponame_list
+	reponame_list = fetch_repos()
+
+	kv = sae.kvdb.Client()	
+	form = PageDownForm()
+    
+    if form.validate_on_submit():
+        about_content = form.pagedown.data
+        kv.set('about', about_content)
+        kv.disconnect_all()
+        return redirect(url_for('about_us'))
+    
+    form.pagedown.data = kv.get('about')
+    kv.disconnect_all()
+    return render_template('about_edit.html', repos=reponame_list, form=form)
 
 @app.route('/tools', methods=['GET'])
 def tools():
@@ -124,7 +156,6 @@ def ranks():
 	res = py.sign_in(creds[0],creds[1])
 	get_graph_data(fetch_repo_dict())
 
-	import sae.kvdb
 	kv = sae.kvdb.Client()
 	graph_data = kv.get("graph")
 	ploturl=draw3d(graph_data)

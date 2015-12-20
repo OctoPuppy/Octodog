@@ -11,14 +11,16 @@
 <!-- README content -->
 <div class="caption-full">
 	<div class="containner">
-        <div align="center">
+        <form method="POST">
             <h1>ABOUT</h1>
-            <hr>
-        </div>
-        {% filter markdown %}
-        {{ content }}
-        {% endfilter %}
+            {{ form.hidden_tag() }}
+            <div>
+                {{ form.pagedown.label }}</b>:
+                {{ form.pagedown(rows=20, style='width:100%') }}
+            </div>
+            <br>
+            <div>{{ form.submit() }}</div>
+        </form>
     </div>
-</div>
 </div>
 {% endblock %}  
