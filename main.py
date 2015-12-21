@@ -96,8 +96,11 @@ def show_pro(reponame):
 	global reponame_list
 	reponame_list = fetch_repos()
 	ownername = fetch_owner_by_repo(reponame)
+	kv = sae.kvdb.Client()
+	repo_content = kv.get(str(reponame))
+	kv.disconnect_all()
 	return render_template("profile.html", reponame=reponame, 
-		repos=reponame_list, ownername=ownername)
+		repos=reponame_list, ownername=ownername, content=repo_content)
 	#return 'showcase for project %s' % reponame
 
 
