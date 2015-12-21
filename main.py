@@ -124,16 +124,15 @@ def edit_about():
 
 	kv = sae.kvdb.Client()	
 	form = PageDownForm()
-    
-    if form.validate_on_submit():
-        about_content = form.pagedown.data
-        kv.set('about', about_content)
-        kv.disconnect_all()
-        return redirect(url_for('about_us'))
-    
-    form.pagedown.data = kv.get('about')
-    kv.disconnect_all()
-    return render_template('about_edit.html', repos=reponame_list, form=form)
+	if form.validate_on_submit():
+		about_content = "\n"+form.pagedown.data
+		kv.set('about', about_content)
+		kv.disconnect_all()
+		return redirect(url_for('about_us'))
+
+	form.pagedown.data = kv.get('about')
+	kv.disconnect_all()
+	return render_template('about_edit.html', repos=reponame_list, form=form)
 
 @app.route('/tools', methods=['GET'])
 def tools():
