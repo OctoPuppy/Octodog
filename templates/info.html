@@ -10,15 +10,15 @@
 {% block content %}
 <!-- README content -->
 <div class="caption-full">
-	<div class="container">
+	
         <h1 align="center">{{title}}</h1>
         <hr>
-        <div style="margin-left:20px; margin-right:20px">
+        <div>
             {% filter markdown %}
             {{ content }}
             {% endfilter %}
         </div>
-    </div>
+    
 </div>
 </div>
 {% endblock %}  
