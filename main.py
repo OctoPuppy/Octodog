@@ -172,11 +172,13 @@ def rank():
 	get_graph_data(fetch_repo_dict())
 
 	kv = sae.kvdb.Client()
+	wiki_content = kv.get('rank')
 	graph_data = kv.get("graph")
 	ploturl=draw3d(graph_data)
 	kv.disconnect_all()
 
-	return render_template("rank.html", repos=reponame_list, ploturl=ploturl)
+	return render_template("rank.html", repos=reponame_list, content=wiki_content,
+		ploturl=ploturl)
 
 @app.route('/cron', methods=['GET'])
 def cron_update():

@@ -1,13 +1,4 @@
- <head>
-     <!-- Bootstrap Core CSS -->
-    <link href="http://lib.sinaapp.com/js/bootstrap/v3.0.0/css/bootstrap.min.css" rel="stylesheet">
-
-
-    <!-- Custom CSS -->
-    <link href="../static/css/shop-item.css" rel="stylesheet">
-</head>
-
-{% extends "layout.html" %}
+{% extends "layout_display.html" %}
 {% block list %}
 <div class="list-group">
     {% for repo in repos %}
@@ -22,6 +13,12 @@
 <div class="caption-full">
     <div align="center">
         <h1>Rank</h1>
+        <hr>
+        <div>
+            {% filter markdown %}
+            {{ content }}
+            {% endfilter %}
+        </div>
         <hr>
         <iframe width="800" height="700" frameborder="0" seamless="seamless" scrolling="no" src= {{ploturl}} ></iframe>
 

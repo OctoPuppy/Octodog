@@ -9,20 +9,20 @@
 
 {% block content %}
 <div class="caption-full">
-<form method="post">
-  <div class="form-group" align="center">
-    {{ form.hidden_tag() }} <!--must have to approve the POST methos-->
-    {{ form.repo_url.label(class="col-sm-3") }}
-    <div class="col-sm-8">
-    {{ form.repo_url(class="form-control",placeholder="http://github.com/user/repository") }}
-  </div>
-</div><br><br>
+  <form method="post">
+    <div class="form-group" align="center">
+      {{ form.hidden_tag() }} <!--must have to approve the POST methos-->
+      {{ form.repo_url.label(class="col-sm-3") }}
+      <div class="col-sm-7">
+        {{ form.repo_url(class="form-control",placeholder="http://github.com/user/repository") }}
+      </div>
+    </div><br/><br/><br/>
     <div class="form-group">
-      <div class="col-sm-offset-3 col-sm-8">
+      <div class="col-sm-offset-4">
         {{ form.submit(class="btn btn-default") }}
       </div>
     </div>
-</form>
+  </form>
 </div>
 {% endblock %} 
 
