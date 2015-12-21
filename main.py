@@ -73,7 +73,7 @@ def insert_pro():
 		reponame_list = fetch_repos()
 		return redirect(url_for('show_pro', reponame=reponame, 
 			repos=reponame_list, _external=True))	
-	return render_template("project.html", repos=reponame_list, 
+	return render_template("addpro.html", repos=reponame_list, 
 		form=form, repo_url=session.get('repo_url'))
 
 @app.route('/delpro')
@@ -82,7 +82,7 @@ def doDelete():
 	delete all repository
 	'''
 	kv = sae.kvdb.Client()
-	temp = kv.getkeys_by_prefix("repo#")
+	temp = kv.getkeys_by_prefix("repo@")
 	for i in temp:
 		kv.delete(i)
 	return redirect(url_for('index'))

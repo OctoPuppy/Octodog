@@ -1,4 +1,4 @@
-{% extends "layout.html" %}
+{% extends "layout_display.html" %}
 {% block list %}
 <div class="list-group">
     {% for repo in repos %}
@@ -16,7 +16,7 @@
     <div class="col-sm-8">
     {{ form.repo_url(class="form-control",placeholder="http://github.com/user/repository") }}
   </div>
-</div><br><br><br>
+</div><br><br>
     <div class="form-group">
       <div class="col-sm-offset-3 col-sm-8">
         {{ form.submit(class="btn btn-default") }}
