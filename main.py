@@ -102,7 +102,7 @@ class PageDownForm(Form):
     submit = SubmitField('Submit')
 
 @app.route('/about', methods=['GET'])
-def about_us():
+def about():
 	# post README here
 	global reponame_list
 	reponame_list = fetch_repos()
@@ -113,10 +113,10 @@ def about_us():
 	return render_template("about.html", repos=reponame_list, 
 		content=about_content)
 
-@app.route('/about/edit', methods=['GET','POST'])
-def edit_about():
+@app.route('/<pagename>/edit', methods=['GET','POST'])
+def edit_mode(pagename):
 	'''
-	Edit about in markdown preview and 
+	Edit in markdown preview and 
 	save it to see markdown in html
 	'''
 	global reponame_list
@@ -126,13 +126,13 @@ def edit_about():
 	form = PageDownForm()
 	if form.validate_on_submit():
 		about_content = "\n"+form.pagedown.data
-		kv.set('about', about_content)
+		kv.set(str(pagename), about_content)
 		kv.disconnect_all()
-		return redirect(url_for('about_us'))
+		return redirect(url_for(str(pagename)))
 
 	form.pagedown.data = kv.get('about')
 	kv.disconnect_all()
-	return render_template('about_edit.html', repos=reponame_list, form=form)
+	return render_template('edit_mode.html', repos=reponame_list, form=form)
 
 @app.route('/tools', methods=['GET'])
 def tools():
@@ -142,7 +142,7 @@ def tools():
 	return render_template("tools.html", repos=reponame_list)
 
 @app.route('/rank', methods=['GET'])
-def ranks():
+def rank():
 	# show toolbox here
 	global reponame_list
 	reponame_list = fetch_repos()
