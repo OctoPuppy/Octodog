@@ -110,7 +110,7 @@ def about():
 	kv = sae.kvdb.Client()
 	about_content = kv.get('about')
 	kv.disconnect_all()
-	return render_template("about.html", repos=reponame_list, 
+	return render_template("info.html", title="ABOUT", repos=reponame_list, 
 		content=about_content)
 
 @app.route('/<pagename>/edit', methods=['GET','POST'])
@@ -130,16 +130,21 @@ def edit_mode(pagename):
 		kv.disconnect_all()
 		return redirect(url_for(str(pagename)))
 
-	form.pagedown.data = kv.get('about')
+	form.pagedown.data = kv.get(str(pagename))
 	kv.disconnect_all()
-	return render_template('edit_mode.html', repos=reponame_list, form=form)
+	return render_template('edit_mode.html', title=str(pagename).upper(),
+		repos=reponame_list, form=form)
 
 @app.route('/tools', methods=['GET'])
 def tools():
 	# show toolbox here
 	global reponame_list
 	reponame_list = fetch_repos()
-	return render_template("tools.html", repos=reponame_list)
+	kv = sae.kvdb.Client()
+	tools_content = kv.get('tools')
+	kv.disconnect_all()
+	return render_template("info.html", title="TOOLS", repos=reponame_list,
+		content=tools_content)
 
 @app.route('/rank', methods=['GET'])
 def rank():

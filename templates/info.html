@@ -12,12 +12,14 @@
 <div class="caption-full">
 	<div class="containner">
         <div align="center">
-            <h1>ABOUT</h1>
-            <hr>
+            <h1>{{title}}</h1>
         </div>
-        {% filter markdown %}
-        {{ content }}
-        {% endfilter %}
+        <hr>
+        <div style="margin-left:20px; margin-right:20px">
+            {% filter markdown %}
+            {{ content }}
+            {% endfilter %}
+        </div>
     </div>
 </div>
 </div>
