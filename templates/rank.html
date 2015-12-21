@@ -11,21 +11,21 @@
 {% block content %}
 
 <div class="caption-full">
-    <div align="center">
-        <h1>Rank</h1>
-        <hr>
-        <div>
-            {% filter markdown %}
-            {{ content }}
-            {% endfilter %}
-        </div>
-        <hr>
+    <h1 align="center">Rank</h1>
+    <hr>
+    <div>
+        {% filter markdown %}
+        {{ content }}
+        {% endfilter %}
+    </div>
+    <hr>
         <iframe width="800" height="700" frameborder="0" seamless="seamless" scrolling="no" src= {{ploturl}} ></iframe>
 
+        
         <!-- D3.js -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
+        <script src="http://cdn.staticfile.org/d3/3.5.6/d3.min.js"></script>
         <!-- jQuery -->
-        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script src="http://cdn.staticfile.org/jquery/2.1.4/jquery.min.js"></script>
         <!-- Plotly.js -->
         <script src="https://d14fo0winaifog.cloudfront.net/plotly-basic.js"></script>
     </div>
