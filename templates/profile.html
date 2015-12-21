@@ -14,26 +14,16 @@
     	<br>
     	<iframe style="float:right" src="https://ghbtns.com/github-btn.html?user={{ownername}}&repo={{reponame}}&type=fork&count=true&size=large&v=2" frameborder="0" scrolling="0" width="160px" height="30px"></iframe>
 
-    	<h1>{{ reponame }}</h1> 
-    	<hr>
-    	<br/>
-
-    	<div id="content">
-    		<h3>About</h3>
-        <!-- to show readme.md page in a frame src变量？-->
-        <a href="http://www.cssdrive.com" target="internal"></a>
+        <div class="containner">
+            <h1>{{ reponame }}</h1> 
+            <hr><br/>
+            <div style="margin-left:20px; margin-right:20px">
+                {% filter markdown %}
+                {{ content }}
+                {% endfilter %}
+            </div>
+        </div>
     </div>
-
-    <iframe src="https://raw.githubusercontent.com/OctoPuppy/Octodog/master/README.md" style="width: 90%; height: 300px" name="internal">
-    </iframe>
-    <hr>
-
-    <h3>Members</h3>
-    <hr>
-
-    <h3></h3>
-
-</div>
 </div>
 
 {% include "repovisual.html" %}

@@ -71,8 +71,7 @@ def insert_pro():
 		new_repo = {'name':reponame, 'url':url, 'owner':ownername, 'stats':repo_stats}
 		add_repo(new_repo) # insert into kvdb 
 		reponame_list = fetch_repos()
-		return redirect(url_for('show_pro', reponame=reponame, 
-			repos=reponame_list, _external=True))	
+		return redirect(url_for('show_pro', reponame=reponame))	
 	return render_template("addpro.html", repos=reponame_list, 
 		form=form, repo_url=session.get('repo_url'))
 
@@ -87,6 +86,10 @@ def doDelete():
 		kv.delete(i)
 	return redirect(url_for('index'))
 
+class PageDownForm(Form):
+    pagedown = PageDownField('Edit Content')
+    submit = SubmitField('Submit')
+
 @app.route('/project/<reponame>', methods=['GET'])
 def show_pro(reponame):
 	# show the project profile with info
@@ -97,9 +100,6 @@ def show_pro(reponame):
 		repos=reponame_list, ownername=ownername)
 	#return 'showcase for project %s' % reponame
 
-class PageDownForm(Form):
-    pagedown = PageDownField('Edit Content')
-    submit = SubmitField('Submit')
 
 @app.route('/about', methods=['GET'])
 def about():
@@ -113,8 +113,8 @@ def about():
 	return render_template("info.html", title="ABOUT", repos=reponame_list, 
 		content=about_content)
 
-@app.route('/<pagename>/edit', methods=['GET','POST'])
-def edit_mode(pagename):
+@app.route('/<path:page>/edit', methods=['GET','POST'])
+def edit_mode(page):
 	'''
 	Edit in markdown preview and 
 	save it to see markdown in html
@@ -122,17 +122,25 @@ def edit_mode(pagename):
 	global reponame_list
 	reponame_list = fetch_repos()
 
+	if 'project' in str(page).split('/'):
+		pagename = str(page).split('/')[-1]
+	else:
+		pagename = str(page)
+
 	kv = sae.kvdb.Client()	
 	form = PageDownForm()
 	if form.validate_on_submit():
-		about_content = "\n"+form.pagedown.data
-		kv.set(str(pagename), about_content)
+		page_content = "\n"+form.pagedown.data
+		kv.set(pagename, page_content)
 		kv.disconnect_all()
-		return redirect(url_for(str(pagename)))
+		if 'project' in str(page).split('/'):
+			return redirect(url_for('show_pro', reponame=pagename))
+		else:
+			return redirect(url_for(pagename))
 
-	form.pagedown.data = kv.get(str(pagename))
+	form.pagedown.data = kv.get(pagename)
 	kv.disconnect_all()
-	return render_template('edit_mode.html', title=str(pagename).upper(),
+	return render_template('edit_mode.html', title=pagename.upper(),
 		repos=reponame_list, form=form)
 
 @app.route('/tools', methods=['GET'])
