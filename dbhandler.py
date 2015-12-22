@@ -59,6 +59,23 @@ def get_graph_data(repo_dict):
     kv.set("graph",data)
     kv.disconnect_all()
 
+def get_table_data(repo_dict):
+    table_data=[]
+    for repo in repo_dict:
+        tdict={}
+        for key, value in repo.items():
+            if key == "name":
+                tdic[key]=value
+            elif key == "stats":
+                tdic["commits"]=value[0]
+                tdic["attention"]=value[1]
+                tdic["uneven"]=value[2]
+        table_data.append(tdic)
+
+    kv=sae.kvdb.Client()
+    kv.set("table", table_data)
+    kv.disconnect_all()
+
 def update_stats(repo):
     kv=sae.kvdb.Client()
     key = "repo@" + str(repo['name'])

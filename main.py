@@ -92,7 +92,9 @@ class PageDownForm(Form):
 
 @app.route('/project/<reponame>', methods=['GET'])
 def show_pro(reponame):
-	# show the project profile with info
+	'''
+	show the project profile with info
+	'''
 	global reponame_list
 	reponame_list = fetch_repos()
 	ownername = fetch_owner_by_repo(reponame)
@@ -106,7 +108,9 @@ def show_pro(reponame):
 
 @app.route('/about', methods=['GET'])
 def about():
-	# post README here
+	'''
+	about OctoDog page
+	'''
 	global reponame_list
 	reponame_list = fetch_repos()
 
@@ -148,7 +152,9 @@ def edit_mode(page):
 
 @app.route('/tools', methods=['GET'])
 def tools():
-	# show toolbox here
+	'''
+	show toolbox here
+	'''
 	global reponame_list
 	reponame_list = fetch_repos()
 	kv = sae.kvdb.Client()
@@ -159,7 +165,11 @@ def tools():
 
 @app.route('/rank', methods=['GET'])
 def rank():
-	# show toolbox here
+	'''
+	Rank methodology & measurement
+	Data table sortable
+	3D plot of rank
+	'''
 	global reponame_list
 	reponame_list = fetch_repos()
 
@@ -170,15 +180,17 @@ def rank():
 
 	res = py.sign_in(creds[0],creds[1])
 	get_graph_data(fetch_repo_dict())
+	get_table_data(fetch_repo_dict())
 
 	kv = sae.kvdb.Client()
 	wiki_content = kv.get('rank')
 	graph_data = kv.get("graph")
 	ploturl=draw3d(graph_data)
+	table_data = kv.get("table")
 	kv.disconnect_all()
 
 	return render_template("rank.html", repos=reponame_list, content=wiki_content,
-		ploturl=ploturl)
+		table_data=table_data, ploturl=ploturl)
 
 @app.route('/cron', methods=['GET'])
 def cron_update():
