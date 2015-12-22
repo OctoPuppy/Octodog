@@ -65,12 +65,12 @@ def get_table_data(repo_dict):
         tdict={}
         for key, value in repo.items():
             if key == "name":
-                tdic[key]=value
+                tdict[key]=value
             elif key == "stats":
-                tdic["commits"]=value[0]
-                tdic["attention"]=value[1]
-                tdic["uneven"]=value[2]
-        table_data.append(tdic)
+                tdict["commits"]=value[0]
+                tdict["attention"]=value[1]
+                tdict["uneven"]=value[2]
+        table_data.append(tdict)
 
     kv=sae.kvdb.Client()
     kv.set("table", table_data)
