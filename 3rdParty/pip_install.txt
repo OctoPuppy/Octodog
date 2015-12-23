@@ -1,0 +1,6 @@
+Flask
+Flask-WTF
+Flask-PageDown
+Flask-Markdown
+requests
+plotly
