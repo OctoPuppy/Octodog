@@ -5,6 +5,7 @@ list stats data for the given repos.
 '''
 
 import requests
+from multiprocessing.dummy import Pool as ThreadPool
 
 auth = ("octodog-auth", "octoocto2015")
 
@@ -39,6 +40,9 @@ def read_repos():
 
     return repo_dict
 
+def fetch_repo_by_owner(owner):
+    temp = read_repos()
+    return temp[owner]
 
 url = "https://api.github.com"
 
@@ -106,7 +110,8 @@ def compute_uneven(owner, repo):
         return 0
     return round((max(tmp2)-min(tmp2))*len(tmp2)/float(sum(tmp2)),2)
 
-def fetch_for_one(owner, repo):
+def fetch_for_one(owner):
+    repo = fetch_repo_by_owner(owner)
     x = get_commits_count(owner, repo) # commits number
     y = get_repo_stats(owner, repo) # attention=watch+star+fork
     z = compute_uneven(owner, repo)
@@ -128,5 +133,29 @@ def fetch_for_one(owner, repo):
 
 #    return results_list
 
+# if __name__ == "__main__":
+#     import time 
+#     start = time.time()
+#     repo_dict = read_repos()
+#     result = {}
+#     for owner, repo in repo_dict.items():
+#         result[owner] = fetch_for_one(owner, repo)
+#     print result
+#     end = time.time()
+#     print "Time: %d" % (end - start)
+# >>> "TIme: 87"
+
 if __name__ == "__main__":
-    print fetch_for_one("OctoPuppy","Octodog")
+    import time 
+    start = time.time()
+    owners = read_repos().keys()
+
+    pool = ThreadPool(8)
+    result = pool.map(fetch_for_one, owners)
+    pool.close() 
+    pool.join() 
+
+    print result
+
+    end = time.time()
+    print "Time using ThreadPool: %d" % (end - start)
