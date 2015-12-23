@@ -163,6 +163,18 @@ def tools():
 	return render_template("info.html", title="TOOLS", repos=reponame_list,
 		content=tools_content)
 
+@app.route('/rank/table.html', methods=['GET'])
+def table():
+	'''
+	sortable table
+	'''
+	get_table_data(fetch_repo_dict())
+	kv = sae.kvdb.Client()
+	table_data = kv.get("table")
+	kv.disconnect_all()
+	return render_template("table.html", table_data=table_data)
+
+
 @app.route('/rank', methods=['GET'])
 def rank():
 	'''
@@ -180,17 +192,15 @@ def rank():
 
 	res = py.sign_in(creds[0],creds[1])
 	get_graph_data(fetch_repo_dict())
-	get_table_data(fetch_repo_dict())
 
 	kv = sae.kvdb.Client()
 	wiki_content = kv.get('rank')
 	graph_data = kv.get("graph")
 	ploturl=draw3d(graph_data)
-	table_data = kv.get("table")
 	kv.disconnect_all()
 
 	return render_template("rank.html", repos=reponame_list, content=wiki_content,
-		table_data=table_data, ploturl=ploturl)
+		ploturl=ploturl)
 
 @app.route('/cron', methods=['GET'])
 def cron_update():
