@@ -78,7 +78,7 @@ def get_repo_stats(owner, repo):
     if r2.status_code == 200:
         repo_data = r2.json()
         stars_count = repo_data["stargazers_count"]
-        watchers_count = repo_data["watchers_count"]
+        watchers_count = repo_data["subscribers_count"]
         forks_count = repo_data["forks_count"]
     else:
         return None
