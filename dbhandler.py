@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 '''
 OctoDog Web Application
-Database
-http://projboard.sinaapp.com/
+Database handler
+http://octodog.sinaapp.com/
 @author: bambooom
 '''
 

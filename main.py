@@ -2,8 +2,7 @@
 '''
 OctoDog Web Application
 Main Web Function
-#TODO-change url name 
-http://projboard.sinaapp.com/
+http://octodog.sinaapp.com/
 @author: bambooom
 '''
 import sys
@@ -204,11 +203,17 @@ def rank():
 
 @app.route('/cron', methods=['GET'])
 def cron_update():
+	from multiprocessing.dummy import Pool as ThreadPool
+
 	repo_dict_list = fetch_repo_dict()
-	for repo in repo_dict_list:
-		update_stats(repo)
+	pool = ThreadPool(8)
+	result = pool.map(update_stats, repo_dict_list)
+	pool.close() 
+    pool.join()
+
+	#for repo in repo_dict_list:
+	#	update_stats(repo)
 	
-	repo_dict_list = fetch_repo_dict()
 	get_graph_data(repo_dict_list)
 	return "Update Data Successfully"
 

@@ -12,7 +12,7 @@ auth = ("octodog-auth", "octoocto2015")
 repotext = [
 "https://github.com/yondjune/iMatch",
 "https://github.com/Run-map/RUNMAP",
-"https://github.com/Wangqiaoyang/RIA-Brain-truster",
+"https://github.com/Wangqiaoyang/RIA-Database",
 "https://github.com/sherlockhoatszx/Stock_Pickup_and_Reminding",
 "https://github.com/penguinjing/PhotoxOrganizer",
 "https://github.com/ivanlau/jizhemai",
@@ -110,8 +110,8 @@ def compute_uneven(owner, repo):
         return 0
     return round((max(tmp2)-min(tmp2))*len(tmp2)/float(sum(tmp2)),2)
 
-def fetch_for_one(owner):
-    repo = fetch_repo_by_owner(owner)
+def fetch_for_one(owner, repo):
+    #repo = fetch_repo_by_owner(owner)
     x = get_commits_count(owner, repo) # commits number
     y = get_repo_stats(owner, repo) # attention=watch+star+fork
     z = compute_uneven(owner, repo)
@@ -155,6 +155,7 @@ if __name__ == "__main__":
     pool.close() 
     pool.join() 
 
+    print owners
     print result
 
     end = time.time()
