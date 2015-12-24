@@ -116,10 +116,10 @@ def about():
 	kv = sae.kvdb.Client()
 	about_content = kv.get('about')
 	kv.disconnect_all()
-	return render_template("info.html", title="ABOUT", repos=reponame_list, 
-		content=about_content)
+	return render_template("info.html", title="ABOUT", page="about", 
+		repos=reponame_list, content=about_content)
 
-@app.route('/<path:page>/edit', methods=['GET','POST'])
+@app.route('/<page>/edit', methods=['POST'])
 def edit_mode(page):
 	'''
 	Edit in markdown preview and 
@@ -128,26 +128,32 @@ def edit_mode(page):
 	global reponame_list
 	reponame_list = fetch_repos()
 
-	if 'project' in str(page).split('/'):
-		pagename = str(page).split('/')[-1]
-	else:
-		pagename = str(page)
+	#if 'project' in str(page).split('/'):
+	#	pagename = str(page).split('/')[-1]
+	#else:
+	#	pagename = str(page)
 
-	kv = sae.kvdb.Client()	
-	form = PageDownForm()
-	if form.validate_on_submit():
-		page_content = "\n"+form.pagedown.data
-		kv.set(pagename, page_content)
-		kv.disconnect_all()
-		if 'project' in str(page).split('/'):
-			return redirect(url_for('show_pro', reponame=pagename))
-		else:
-			return redirect(url_for(pagename))
+	kv = sae.kvdb.Client()
+	content = request.form["editContent"]
+	kv.set(str(page), content)
+	#if 'project' in str(page).split('/'):
+	#	return redirect(url_for('show_pro', reponame=pagename))
+	#else:
+	return redirect(url_for(str(page)))
+	#form = PageDownForm()
+	#if form.validate_on_submit():
+	#	page_content = "\n"+form.pagedown.data
+	#	kv.set(pagename, page_content)
+	#	kv.disconnect_all()
+	#	if 'project' in str(page).split('/'):
+	#		return redirect(url_for('show_pro', reponame=pagename))
+	#	else:
+	#		return redirect(url_for(pagename))
 
-	form.pagedown.data = kv.get(pagename)
-	kv.disconnect_all()
-	return render_template('edit_mode.html', title=pagename.upper(),
-		repos=reponame_list, form=form)
+	#form.pagedown.data = kv.get(pagename)
+	#kv.disconnect_all()
+	#return render_template('edit_mode.html', title=pagename.upper(),
+	#	repos=reponame_list, form=form)
 
 @app.route('/tools', methods=['GET'])
 def tools():
@@ -208,8 +214,8 @@ def cron_update():
 	repo_dict_list = fetch_repo_dict()
 	pool = ThreadPool(8)
 	result = pool.map(update_stats, repo_dict_list)
-	pool.close() 
-    pool.join()
+	pool.close()
+	pool.join()
 
 	#for repo in repo_dict_list:
 	#	update_stats(repo)

@@ -12,6 +12,7 @@
 <div class="caption-full">
 	
         <h1 align="center">{{title}}</h1>
+        <a href="#editModal" data-toggle="modal"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
         <hr>
         <div>
             {% filter markdown %}
@@ -20,5 +21,27 @@
         </div>
     
 </div>
-</div>
+<!-- Modals -->
+  <!-- Modal for edit -->
+  <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="editModalLabel">Edit {{title}}</h4>
+        </div>
+        <div class="modal-body">
+          <form action={{ url_for('edit_mode', page=page) }} method="POST">
+            <div class="form-group">
+              <label class="control-label">添加内容:</label>
+              <textarea class="form-control" name="editContent"></textarea>
+            </div>
+            <button class="btn btn-primary" type="submit">Submit</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
 {% endblock %}  

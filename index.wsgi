@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 '''
-OctoDog Web Application
-#TODO-change url name 
-http://projboard.sinaapp.com/
+OctoDog Web Application 
+http://octodog.sinaapp.com/
 @author: bambooom
 '''
 

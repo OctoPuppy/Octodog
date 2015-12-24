@@ -2,8 +2,7 @@
 '''
 OctoDog Web Application
 Draw 3D scatter plot in rank page
-#TODO-change url name 
-http://projboard.sinaapp.com/
+http://octodog.sinaapp.com/
 @author: bambooom
 '''
 
