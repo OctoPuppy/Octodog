@@ -14,14 +14,42 @@
     	<br/><br/>
     	<iframe style="float:right" src="https://ghbtns.com/github-btn.html?user={{ownername}}&repo={{reponame}}&type=fork&count=true&size=large&v=2" frameborder="0" scrolling="0" width="160px" height="30px"></iframe>
 
-            <h1>{{ reponame }}</h1> 
-            <hr><br/>
-            <div style="margin-left:20px; margin-right:20px">
+        <style type="text/css">
+        h1,h4{ display:inline;}
+        </style>
+        
+        <div align="center">
+            <h1>{{ reponame }}   </h1><h4><a href="#editModal" data-toggle="modal" color="black"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a></h4>
+        </div>
+        <hr>
+            <div style="margin-left:50px; margin-right:50px">
                 {% filter markdown %}
                 {{ content }}
                 {% endfilter %}
             </div>
 </div>
+<!-- Modals -->
+  <!-- Modal for edit -->
+  <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="editModalLabel">Edit {{reponame}}</h4>
+        </div>
+        <div class="modal-body">
+          <form action={{ url_for('edit_pro', reponame=reponame) }} method="POST">
+            <div class="form-group">
+              <label class="control-label">编辑内容:</label>
+              <textarea class="form-control" name="editContent">{{ content }}</textarea>
+            </div>
+            <button class="btn btn-primary" type="submit">Submit</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
 
 {% include "repovisual.html" %}
 {% endblock %}

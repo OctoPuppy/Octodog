@@ -104,6 +104,15 @@ def show_pro(reponame):
 		repos=reponame_list, ownername=ownername, content=repo_content)
 	#return 'showcase for project %s' % reponame
 
+@app.route('/project/<reponame>/edit', methods=['POST'])
+def edit_pro(reponame):
+	global reponame_list
+	reponame_list = fetch_repos()
+	kv = sae.kvdb.Client()
+	content = "\n" + request.form["editContent"] # bugs for flask-markdown, need /n
+	kv.set(str(reponame), content)
+	return redirect(url_for('show_pro', reponame=str(reponame)))
+
 
 @app.route('/about', methods=['GET'])
 def about():
@@ -122,7 +131,7 @@ def about():
 @app.route('/<page>/edit', methods=['POST'])
 def edit_mode(page):
 	'''
-	Edit in markdown preview and 
+	Edit in markdown and 
 	save it to see markdown in html
 	'''
 	global reponame_list
@@ -134,7 +143,7 @@ def edit_mode(page):
 	#	pagename = str(page)
 
 	kv = sae.kvdb.Client()
-	content = "\n" + request.form["editContent"] # small bugs for flask-markdown
+	content = "\n" + request.form["editContent"] # bugs for flask-markdown, need /n
 	kv.set(str(page), content)
 	#if 'project' in str(page).split('/'):
 	#	return redirect(url_for('show_pro', reponame=pagename))
