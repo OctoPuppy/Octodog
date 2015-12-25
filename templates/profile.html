@@ -27,6 +27,30 @@
                 {{ content }}
                 {% endfilter %}
             </div>
+        <hr>
+        {% include "repovisual.html" %}
+        <hr>
+        <!-- Disqus script -->
+        <div id="disqus_thread" style="margin-left:50px; margin-right:50px; margin-top:50px"></div>
+
+            <script>
+            var disqus_config = function () {
+            this.page.url = document.URL; // Replace PAGE_URL with your page's canonical URL variable
+            this.page.identifier = document.URL; // Replace PAGE_IDENTIFIER with your page's identifier variable
+        };
+
+        (function() { // DON'T EDIT BELOW THIS LINE
+            var d = document, s = d.createElement('script');
+            s.src = '//octopuppy.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+        </script>
+
+            <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+
+    <script id="dsq-count-scr" src="//octopuppy.disqus.com/count.js" async></script>
 </div>
 <!-- Modals -->
   <!-- Modal for edit -->
@@ -51,5 +75,5 @@
     </div>
   </div>
 
-{% include "repovisual.html" %}
+
 {% endblock %}
