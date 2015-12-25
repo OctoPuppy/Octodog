@@ -1,0 +1,22 @@
+{% extends "layout_display.html" %}
+{% block list %}
+<div class="list-group">
+    {% for repo in repos %}
+    <a href={{url_for('show_pro', reponame=repo)}} class="list-group-item">{{repo}}</a>
+    {% endfor %}
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="caption-full">
+	<div class="list-group">
+		<h2 align="center"> Click the button to DELETE the project </h2>
+		<hr>
+		<div style="margin-left:50px; margin-right:50px">
+			{% for repo in repos %}
+			<a href={{url_for('delete_pro', reponame=repo)}} class="list-group-item">DELETE {{repo}}</a>
+			{% endfor %}
+	    </div>
+    </div>
+</div>
+{% endblock %}
