@@ -134,7 +134,7 @@ def edit_mode(page):
 	#	pagename = str(page)
 
 	kv = sae.kvdb.Client()
-	content = request.form["editContent"]
+	content = "\n" + request.form["editContent"] # small bugs for flask-markdown
 	kv.set(str(page), content)
 	#if 'project' in str(page).split('/'):
 	#	return redirect(url_for('show_pro', reponame=pagename))
@@ -165,13 +165,13 @@ def tools():
 	kv = sae.kvdb.Client()
 	tools_content = kv.get('tools')
 	kv.disconnect_all()
-	return render_template("info.html", title="TOOLS", repos=reponame_list,
-		content=tools_content)
+	return render_template("info.html", title="TOOLS", page="tools",
+		repos=reponame_list, content=tools_content)
 
 @app.route('/rank/table.html', methods=['GET'])
 def table():
 	'''
-	sortable table
+	sortable table, only for display on /rank page
 	'''
 	get_table_data(fetch_repo_dict())
 	kv = sae.kvdb.Client()
@@ -209,16 +209,16 @@ def rank():
 
 @app.route('/cron', methods=['GET'])
 def cron_update():
-	from multiprocessing.dummy import Pool as ThreadPool
+	#from multiprocessing.dummy import Pool as ThreadPool
 
 	repo_dict_list = fetch_repo_dict()
-	pool = ThreadPool(8)
-	result = pool.map(update_stats, repo_dict_list)
-	pool.close()
-	pool.join()
+	#pool = ThreadPool(8)
+	#pool.map(update_stats, repo_dict_list)
+	#pool.close()
+	#pool.join()
 
-	#for repo in repo_dict_list:
-	#	update_stats(repo)
+	for repo in repo_dict_list:
+		update_stats(repo)
 	
 	get_graph_data(repo_dict_list)
 	return "Update Data Successfully"

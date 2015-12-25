@@ -4,4 +4,4 @@ version: 4
 cron:
 - description: update github data
   url: /cron
-  schedule: * */1 * * *
+  schedule: "* */1 * * *"
