@@ -9,9 +9,14 @@
 {% endblock %}
 
 {% block content %}
-
+<!-- Rank Methodology explaination -->
 <div class="caption-full">
-    <h1 align="center">Rank</h1>
+    <style type="text/css">
+    h1,h4{ display:inline;}
+    </style>
+    <div align="center">
+        <h1>{{title}}   </h1><h4><a href="#editModal" data-toggle="modal" color="black"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a></h4>
+        </div>
     <hr>
     <div>
         {% filter markdown %}
@@ -19,9 +24,11 @@
         {% endfilter %}
     </div>
     <hr>
-    <iframe width="100%" height="400" frameborder="0" src="http://3.octodog.sinaapp.com/rank/table.html" ></iframe>
+    <!-- Sortable Rank Table in 3 dimension -->
+    <iframe width="100%" height="400" frameborder="0" src="http://2.octodog.sinaapp.com/rank/table.html" ></iframe>
     
     <hr>
+    <!-- 3D plot using plotly -->
         <iframe width="800" height="700" frameborder="0" seamless="seamless" scrolling="no" src= "{{ploturl}}" ></iframe>
 
         
@@ -31,6 +38,28 @@
         <script src="http://cdn.staticfile.org/jquery/2.1.4/jquery.min.js"></script>
         <!-- Plotly.js -->
         <script src="https://d14fo0winaifog.cloudfront.net/plotly-basic.js"></script>
-    </div>
 </div>
+<!-- Modals -->
+  <!-- Modal for edit -->
+  <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="editModalLabel">Edit {{title}}</h4>
+        </div>
+        <div class="modal-body">
+          <form action={{ url_for('edit_mode', page=page) }} method="POST">
+            <div class="form-group">
+              <label class="control-label">编辑内容:</label>
+              <textarea class="form-control" name="editContent">{{ content }}</textarea>
+            </div>
+            <button class="btn btn-primary" type="submit">Submit</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
 {% endblock %}

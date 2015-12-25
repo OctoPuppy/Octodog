@@ -74,7 +74,7 @@ def insert_pro():
 	return render_template("addpro.html", repos=reponame_list, 
 		form=form, repo_url=session.get('repo_url'))
 
-@app.route('/delpro')
+@app.route('/delpro') #TODO: delete repository one by one
 def doDelete():
 	'''
 	delete all repository
@@ -85,9 +85,9 @@ def doDelete():
 		kv.delete(i)
 	return redirect(url_for('index'))
 
-class PageDownForm(Form):
-    pagedown = PageDownField('Edit Content')
-    submit = SubmitField('Submit')
+#class PageDownForm(Form):
+#    pagedown = PageDownField('Edit Content')
+#    submit = SubmitField('Submit')
 
 @app.route('/project/<reponame>', methods=['GET'])
 def show_pro(reponame):
@@ -204,8 +204,8 @@ def rank():
 	ploturl=draw3d(graph_data)
 	kv.disconnect_all()
 
-	return render_template("rank.html", repos=reponame_list, content=wiki_content,
-		ploturl=ploturl)
+	return render_template("rank.html", repos=reponame_list, title="RANK", 
+		page="rank", content=wiki_content, ploturl=ploturl)
 
 @app.route('/cron', methods=['GET'])
 def cron_update():
