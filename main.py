@@ -74,16 +74,36 @@ def insert_pro():
 	return render_template("addpro.html", repos=reponame_list, 
 		form=form, repo_url=session.get('repo_url'))
 
-@app.route('/delpro') #TODO: delete repository one by one
-def doDelete():
+@app.route('/deleteall') #TODO: delete repository one by one
+def delete_all():
 	'''
 	delete all repository
 	'''
 	kv = sae.kvdb.Client()
-	temp = kv.getkeys_by_prefix("repo@")
+	temp = kv.getkeys_by_prefix("repo#")
 	for i in temp:
 		kv.delete(i)
 	return redirect(url_for('index'))
+
+@app.route('/delete')
+def delete_page():
+	'''
+	delete project page
+	'''
+	global reponame_list
+	reponame_list = fetch_repos()
+	return render_template("delete.html", repos=reponame_list)
+
+@app.route('/delete/<reponame>')
+def delete_pro(reponame):
+	'''
+	delete one repo data
+	'''
+	kv = sae.kvdb.Client()
+	key = "repo#"+str(reponame)
+	kv.delete(key)
+	kv.disconnect_all()
+	return redirect(url_for('delete_page'))
 
 #class PageDownForm(Form):
 #    pagedown = PageDownField('Edit Content')

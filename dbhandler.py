@@ -16,7 +16,7 @@ sys.setdefaultencoding('utf-8')
 
 def fetch_repos():
     kv = sae.kvdb.Client()
-    temp1 = [i[1] for i in list(kv.get_by_prefix("repo@"))]
+    temp1 = [i[1] for i in list(kv.get_by_prefix("repo#"))]
     temp2 = sorted(temp1, key = lambda x:x['name'])
     name_list = [temp2[i]['name'] for i in range(len(temp2))]
     kv.disconnect_all()
@@ -24,7 +24,7 @@ def fetch_repos():
 
 def fetch_repo_dict():
     kv = sae.kvdb.Client()
-    temp = [i[1] for i in kv.get_by_prefix("repo@")]
+    temp = [i[1] for i in kv.get_by_prefix("repo#")]
     kv.disconnect_all()
     return temp
 
@@ -37,7 +37,7 @@ def fetch_owner_by_repo(repo):
 
 def add_repo(new_repo):
     kv = sae.kvdb.Client()
-    key = "repo@" + str(new_repo['name'])
+    key = "repo#" + str(new_repo['name'])
     kv.set(key,new_repo)
     kv.disconnect_all()
 
@@ -78,7 +78,7 @@ def get_table_data(repo_dict):
 
 def update_stats(repo):
     kv=sae.kvdb.Client()
-    key = "repo@" + str(repo['name'])
+    key = "repo#" + str(repo['name'])
     
     from get_repos_stats import fetch_for_one
     repo['stats'] = fetch_for_one(repo['owner'],repo['name'])
