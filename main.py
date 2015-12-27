@@ -249,6 +249,7 @@ def cron_update():
 	for repo in repo_dict_list:
 		update_stats(repo)
 	
+	repo_dict_list = fetch_repo_dict()
 	get_graph_data(repo_dict_list)
 	return "Update Data Successfully"
 
